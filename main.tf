@@ -26,7 +26,7 @@ resource "azurerm_public_ip" "example" {
   location            = azurerm_resource_group.example.location
   resource_group_name = azurerm_resource_group.example.name
   allocation_method   = "Dynamic"
-  domain_name_label   = "example-domain-name-label"  // replace with your desired domain name label
+  domain_name_label   = "something-super-unique-asdf3452kllka2345"  // replace with your desired domain name label
 }
 
 resource "azurerm_network_interface" "example" {
