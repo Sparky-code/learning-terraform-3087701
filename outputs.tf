@@ -5,3 +5,7 @@ output "source_image_id" {
 output "source_id" {
     value = azurerm_linux_virtual_machine.example.id
 }
+
+output "public_dns" {
+  value = azurerm_public_ip.example.fqdn
+}
