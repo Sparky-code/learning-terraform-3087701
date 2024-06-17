@@ -40,9 +40,11 @@ resource "azurerm_linux_virtual_machine" "example" {
   size                = var.vm_size
   admin_username      = "adminuser"
   admin_password      = "Password12345!" 
+
   network_interface_ids = [
     azurerm_network_interface.example.id,
   ]
+
   disable_password_authentication = false
 
   os_disk {
@@ -56,4 +58,64 @@ resource "azurerm_linux_virtual_machine" "example" {
     sku       = "18.04-LTS"
     version   = "latest"
   }
+}
+
+resource "azurerm_network_interface_security_group_association" "example" {
+  network_interface_id      = azurerm_network_interface.example.id
+  network_security_group_id = azurerm_network_security_group.blog.id
+}
+
+resource "azurerm_network_security_group" "blog" {
+  name = "blog"
+  location = azurerm_resource_group.example.location
+  resource_group_name = azurerm_resource_group.example.name
+
+  tags = {
+      description = "Allow HTTP and HTTPS in. Allow all traffic out."
+  }
+}
+
+resource "azurerm_network_security_rule" "blog_http_in" {
+  description = "Allow HTTP/HTTPS in"
+  name                        = "http"
+  priority                    = 1001
+  direction                   = "Inbound"
+  access                      = "Allow"
+  protocol                    = "Tcp"
+  source_port_range           = "80"
+  destination_port_range      = "80"
+  source_address_prefix       = "0.0.0.0/0"
+  destination_address_prefix  = "*"
+  resource_group_name         = azurerm_resource_group.example.name
+  network_security_group_name = azurerm_network_security_group.blog.name
+}
+
+resource "azurerm_network_security_rule" "blog_https_in" {
+  description = "Allow HTTP/HTTPS in"
+  name                        = "http"
+  priority                    = 1001
+  direction                   = "Inbound"
+  access                      = "Allow"
+  protocol                    = "Tcp"
+  source_port_range           = "443"
+  destination_port_range      = "443"
+  source_address_prefix       = "0.0.0.0/0"
+  destination_address_prefix  = "*"
+  resource_group_name         = azurerm_resource_group.example.name
+  network_security_group_name = azurerm_network_security_group.blog.name
+}
+
+resource "azurerm_network_security_rule" "blog_everything_out" {
+  description = "Allow HTTP/HTTPS in"
+  name                        = "http"
+  priority                    = 1001
+  direction                   = "Outbound"
+  access                      = "Allow"
+  protocol                    = "*"
+  source_port_range           = "*"
+  destination_port_range      = "*"
+  source_address_prefix       = "0.0.0.0/0"
+  destination_address_prefix  = "*"
+  resource_group_name         = azurerm_resource_group.example.name
+  network_security_group_name = azurerm_network_security_group.blog.name
 }
