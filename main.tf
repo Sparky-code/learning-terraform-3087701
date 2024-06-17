@@ -37,7 +37,7 @@ resource "azurerm_linux_virtual_machine" "example" {
   name                = "example-vm"
   resource_group_name = azurerm_resource_group.example.name
   location            = azurerm_resource_group.example.location
-  size                = "Standard_DS1_v2"
+  size                = var.vm_size
   admin_username      = "adminuser"
   admin_password      = "Password12345!" 
   network_interface_ids = [

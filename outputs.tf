@@ -1,7 +1,7 @@
-#output "instance_ami" {
-#  value = aws_instance.web.ami
-#}
+output "instance_image_id" {
+    value = azurerm_virtual_machine.web.storage_image_reference.id
+}
 
-#output "instance_arn" {
-#  value = aws_instance.web.arn
-#}
+output "instance_id" {
+    value = azurerm_virtual_machine.web.id
+}
